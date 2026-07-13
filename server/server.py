@@ -1,7 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 from api_client import APIClient
 
-mcp = FastMCP("event-ticketing")
+mcp = FastMCP("event-ticketing-mcp")
 
 @mcp.tool()
 def get_event_availability(event_id: str, token: str) -> dict:
