@@ -103,3 +103,20 @@ class APIClient:
         event_detail = response.json()["data"]
         
         return event_detail
+
+    def search_events(self, nama: str) -> list:
+        try:
+            response = httpx.get(
+                f"{self.base_url}/api/events/search?nama={nama}",
+                headers=self._get_headers()
+            )
+        except httpx.RequestError as e:
+            raise Exception(f"Tidak bisa terhubung ke server: {str(e)}")
+
+        # handle error di sini
+        if response.status_code != 200:
+            raise Exception(response.json()["message"])
+
+        list_events = response.json()["data"]
+
+        return list_events

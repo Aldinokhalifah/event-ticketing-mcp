@@ -3,6 +3,29 @@ from api_client import APIClient
 
 mcp = FastMCP("event-ticketing-mcp")
 
+
+@mcp.tool()
+def search_event(nama: str, token: str) -> dict:
+    """Cari event berdasarkan nama event.
+    Gunakan tool ini PERTAMA ketika user menyebut nama event.
+    Hasil pencarian berisi event_id yang dibutuhkan tool lain.
+
+    Args:
+        nama (str): Nama dari event yang dicari
+
+    Returns:
+        dict: detail event
+    """
+
+    client = APIClient(token)
+    # panggil method yang sesuai di api_client
+    data = client.search_events(nama)
+    
+    return {
+        "keyword": nama,
+        "detail_event": data
+    }
+
 @mcp.tool()
 def get_event_availability(event_id: str, token: str) -> dict:
     """Ambil detail informasi sebuah event berdasarkan event_id.
