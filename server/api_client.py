@@ -1,5 +1,7 @@
 import httpx
+import json
 import os
+import sys
 from dotenv import load_dotenv
 from utils.status_order import STATUS_MAP
 
@@ -39,10 +41,12 @@ class APIClient:
         return tiket_kategori
     
     def create_order(self, items: list) -> dict:
+        if isinstance(items, str):
+            items = json.loads(items)
         # merubah snake case menjadi camel case
         converted = [
             {
-                "tiketKategoriId": str(item["tiket_kategori_id"]),
+                "tiketKategoriId": item["tiketKategoriId"],
                 "jumlah": item["jumlah"]
             }
             for item in items
@@ -50,7 +54,7 @@ class APIClient:
 
         try:
             response = httpx.post(
-                f"{self.base_url}/api/orders/",
+                f"{self.base_url}/api/orders",
                 headers=self._get_headers(),
                 json={"items": converted}
             )
@@ -82,3 +86,20 @@ class APIClient:
         order["status"] = converted_status
         
         return order
+
+    def get_event_by_id(self, event_id: str) -> dict:
+        try:
+            response = httpx.get(
+                f"{self.base_url}/api/events/{event_id}",
+                headers=self._get_headers()
+            )
+        except httpx.RequestError as e:
+            raise Exception(f"Tidak bisa terhubung ke server: {str(e)}")
+        
+        # handle error di sini
+        if response.status_code != 200:
+            raise Exception(response.json()["message"])
+
+        event_detail = response.json()["data"]
+        
+        return event_detail
