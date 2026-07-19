@@ -64,8 +64,8 @@ async def run_agent(request: ChatRequest) -> ChatResponse:
                 message = request.message
                 messages.append({"role": "user", "content": message})
                 
-                # Agent loop — maksimal 6 iterasi untuk hindari infinite loop
-                max_iterations = 6
+                # Agent loop — maksimal 10 iterasi untuk hindari infinite loop
+                max_iterations = 10
                 iteration = 0
                 
                 while iteration <= max_iterations:
