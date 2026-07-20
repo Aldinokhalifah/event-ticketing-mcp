@@ -85,6 +85,8 @@ event-ticketing-mcp/
 | `get_ticket_category_event` | Daftar kategori tiket + sisa kuota | `GET /api/events/{id}/tiket-kategori` |
 | `create_order` | Buat order tiket baru | `POST /api/orders` |
 | `check_order_status` | Cek status order | `GET /api/orders/{id}` |
+| `get_my_orders` | Ambil semua order milik user saat ini | `GET /api/orders` |
+| `get_events_list` | Ambil daftar event ter-publish | `GET /api/events` |
 
 Token JWT di-inject otomatis ke setiap tool call — user tidak perlu tahu UUID atau token apapun.
 
@@ -159,7 +161,7 @@ npx @modelcontextprotocol/inspector python server.py
 ```
 
 Buka `http://localhost:6274` lalu:
-- Pastikan 5 tools terdaftar di tab **Tools**
+- Pastikan 7 tools terdaftar di tab **Tools**
 - Tes tiap tool manual dengan mengisi `event_id`/`token` yang valid
 
 ### Tahap 2 — Tes End-to-End via Postman

@@ -108,5 +108,42 @@ def check_order_status(order_id: str, token: str) -> dict:
         "order_status": data
     }
 
+@mcp.tool()
+def get_my_orders(token: str) -> dict:
+    """Ambil semua order milik user yang sedang login.
+    Gunakan tool ini ketika user ingin melihat daftar order
+    atau ingin mengecek status order tanpa tahu order_id-nya.
+    Dari hasil tool ini, ambil id untuk digunakan di check_order_status.
+
+    Returns:
+        dict: detail order beserta status terkini dalam bahasa Indonesia
+    """
+
+    client = APIClient(token)
+    
+    data = client.get_my_orders()
+    
+    return {
+        "orders": data
+    }
+
+@mcp.tool()
+def get_events_list(token: str) -> dict:
+    """Mengambil semua event yang tersedia.
+    Gunakan tool ini ketika user ingin melihat semua daftar event yang tersedia.
+    Gunakan tool ini jika hasil pencarian menggunakan tool search_event tidak ditemukan.
+
+    Returns:
+        dict: list events
+    """
+
+    client = APIClient(token)
+    
+    data = client.list_events()
+    
+    return {
+        "list_events": data
+    }
+
 if __name__ == "__main__":
     mcp.run(transport="stdio")

@@ -120,3 +120,45 @@ class APIClient:
         list_events = response.json()["data"]
 
         return list_events
+
+    def get_my_orders(self) -> list:
+        try:
+            response = httpx.get(
+                f"{self.base_url}/api/orders",
+                headers=self._get_headers()
+            )
+        except httpx.RequestError as e:
+            raise Exception(f"Tidak bisa terhubung ke server: {str(e)}")
+
+        # handle error di sini
+        if response.status_code != 200:
+            raise Exception(response.json()["message"])
+        
+        orders = response.json()["data"]
+    
+        # translate status tiap orders pakai STATUS_MAP
+        for order in orders:
+            order["status"] = STATUS_MAP.get(order["status"], order["status"])
+
+        # return list orders
+        return orders
+    
+    def list_events(self) -> list:
+        try:
+            response = httpx.get(
+                f"{self.base_url}/api/events",
+                headers=self._get_headers()
+            )
+        except httpx.RequestError as e:
+            raise Exception(f"Tidak bisa terhubung ke server: {str(e)}")
+
+        # handle error di sini
+        if response.status_code != 200:
+            raise Exception(response.json()["message"])
+
+        list_events = response.json()["data"]
+
+        # filter hanya PUBLISHED
+        published = [e for e in list_events if e["status"] == "PUBLISHED"]
+        
+        return published
